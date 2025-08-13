@@ -1,0 +1,428 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Product Listing | Task 4</title>
+  <style>
+    body {
+  margin: 0;
+  font-family: 'Segoe UI', sans-serif;
+  background-color: #0f172a;
+  color: #e2e8f0;
+}
+
+.container {
+  max-width: 1200px;
+  margin: auto;
+  padding: 40px 20px;
+}
+
+.title {
+  text-align: center;
+  font-size: 2rem;
+  margin-bottom: 30px;
+  color: #0ea5e9;
+}
+
+.filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  justify-content: center;
+  margin-bottom: 30px;
+}
+
+select {
+  padding: 10px 15px;
+  border-radius: 8px;
+  background-color: #1e293b;
+  color: #fff;
+  border: 1px solid #334155;
+}
+
+.product-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 20px;
+}
+
+.product-card {
+  background: linear-gradient(145deg, #1e293b, #0f172a);
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 5px 20px rgba(0,0,0,0.2);
+  transition: transform 0.3s ease;
+}
+
+.product-card:hover {
+  transform: translateY(-5px);
+}
+
+.product-card img {
+  width: 100%;
+  height: 200px;
+  object-fit: cover;
+}
+
+.product-card .info {
+  padding: 15px;
+}
+
+.product-card h3 {
+  font-size: 1.1rem;
+  color: #7e22ce;
+}
+
+.product-card p {
+  font-size: 0.95rem;
+  margin: 5px 0;
+}
+
+.price {
+  color: #0ea5e9;
+  font-weight: bold;
+}
+
+.rating {
+  color: #facc15;
+}
+
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1 class="title">🛒 Product Listing</h1>
+
+    <!-- Filters -->
+    <div class="filters">
+      <select id="categoryFilter">
+        <option value="all">All Categories</option>
+        <option value="electronics">Electronics</option>
+        <option value="fashion">Fashion</option>
+        <option value="home">Home</option>
+      </select>
+
+      <select id="priceFilter">
+        <option value="all">All Prices</option>
+        <option value="low">Under ₹500</option>
+        <option value="medium">₹500 - ₹1000</option>
+        <option value="high">Above ₹1000</option>
+      </select>
+
+      <select id="sortRating">
+        <option value="default">Sort by Rating</option>
+        <option value="high">High to Low</option>
+        <option value="low">Low to High</option>
+      </select>
+    </div>
+
+    <!-- Product Cards -->
+    <div class="product-grid" id="productList"></div>
+  </div>
+
+  <script>
+    const products = [
+  {
+    id: 1,
+    name: "Smart Watch",
+    category: "electronics",
+    price: 999,
+    rating: 4.2,
+    image: "Images/Smart Watch.webp"
+  },
+  {
+    id: 2,
+    name: "Bluetooth Speaker",
+    category: "electronics",
+    price: 1499,
+    rating: 4.7,
+    image: "Images/Bluetooth Speaker.webp"
+  },
+  {
+    id: 3,
+    name: "T-shirt",
+    category: "fashion",
+    price: 399,
+    rating: 3.8,
+    image: "Images/T-Shirt.webp"
+  },
+  {
+    id: 4,
+    name: "Sofa Cover Set",
+    category: "home",
+    price: 799,
+    rating: 4.0,
+    image: "Images/Sofa Cover set.webp"
+  },
+  {
+    id: 5,
+    name: "Wireless Earbuds",
+    category: "electronics",
+    price: 1299,
+    rating: 4.5,
+    image: "Images/Earbuds.webp"
+  },
+  {
+    id: 6,
+    name: "Women's Kurti",
+    category: "fashion",
+    price: 699,
+    rating: 4.1,
+    image: "Images/Woman Kurti.jpeg"
+  },
+  {
+    id: 7,
+    name: "LED Night Lamp",
+    category: "home",
+    price: 299,
+    rating: 3.9,
+    image: "Images/LED night lamp.webp"
+  },
+  {
+    id: 8,
+    name: "Men's Wallet",
+    category: "fashion",
+    price: 499,
+    rating: 4.3,
+    image: "Images/Mens Wallet.webp"
+  },
+  {
+    id: 9,
+    name: "Lenevo Laptop",
+    category: "electronics",
+    price: 59990,
+    rating: 5,
+    image: "Images/Lenovo Laptop.jpeg"
+  },
+  {
+    id: 10,
+    name: "Gaming Mouse",
+    category: "electronics",
+    price: 999,
+    rating: 4.4,
+    image: "Images/Gaming Mouse.webp"
+  },
+  {
+    id: 11,
+    name: "Men's Running Shoes",
+    category: "fashion",
+    price: 1599,
+    rating: 4.6,
+    image: "Images/Mens Running Shoes.jpeg"
+  },
+  {
+    id: 12,
+    name: "Ceramic Vase",
+    category: "home",
+    price: 349,
+    rating: 3.7,
+    image: "Images/Ceramic Vase.webp"
+  },
+  {
+    id: 13,
+    name: "Noise Cancelling Headphones",
+    category: "electronics",
+    price: 3499,
+    rating: 4.8,
+    image: "Images/Noise Cancelling Headphones.webp"
+  },
+  {
+    id: 14,
+    name: "Ladies Handbag",
+    category: "fashion",
+    price: 1199,
+    rating: 4.2,
+    image: "Images/Ladies Handbag.webp"
+  },
+  {
+    id: 15,
+    name: "Decorative Wall Clock",
+    category: "home",
+    price: 599,
+    rating: 4.0,
+    image: "Images/Decorative Wall Clock.webp"
+  },
+  {
+    id: 16,
+    name: "Power Bank 10000mAh",
+    category: "electronics",
+    price: 899,
+    rating: 4.3,
+    image: "Images/Power Bank 10000mAh.webp"
+  },
+  {
+    id: 17,
+    name: "Women's Heels",
+    category: "fashion",
+    price: 799,
+    rating: 4.1,
+    image: "Images/Women's Heels.webp"
+  },
+  {
+    id: 18,
+    name: "LED Strip Lights",
+    category: "home",
+    price: 499,
+    rating: 4.4,
+    image: "Images/LED Strip Lights.webp"
+  },
+  {
+    id: 19,
+    name: "Tablet with Stylus",
+    category: "electronics",
+    price: 12999,
+    rating: 4.6,
+    image: "Images/Tablet with Stylus.jpeg"
+  },
+  {
+    id: 20,
+    name: "Denim Jacket",
+    category: "fashion",
+    price: 1499,
+    rating: 4.5,
+    image: "Images/Denim Jacket.jpeg"
+  },
+  {
+    id: 21,
+    name: "Curtains (Set of 2)",
+    category: "home",
+    price: 799,
+    rating: 3.9,
+    image: "Images/Curtains (Set of 2).webp"
+  },
+  {
+    id: 22,
+    name: "Wireless Keyboard & Mouse Combo",
+    category: "electronics",
+    price: 1799,
+    rating: 4.2,
+    image: "Images/Wireless Keyboard & Mouse Combo.webp"
+  },
+  {
+    id: 23,
+    name: "Sports T-Shirt",
+    category: "fashion",
+    price: 499,
+    rating: 4.1,
+    image: "Images/Sports T-Shirt.webp"
+  },
+  {
+    id: 24,
+    name: "Wall Painting",
+    category: "home",
+    price: 1099,
+    rating: 4.5,
+    image: "Images/Wall Painting.webp"
+  },
+  {
+    id: 25,
+    name: "Action Camera",
+    category: "electronics",
+    price: 2999,
+    rating: 4.6,
+    image: "Images/Action Camera.webp"
+  },
+  {
+    id: 26,
+    name: "Casual Shirt",
+    category: "fashion",
+    price: 799,
+    rating: 4.0,
+    image: "Images/Casual Shirt.jpeg"
+  },
+  {
+    id: 27,
+    name: "Wooden Bookshelf",
+    category: "home",
+    price: 2499,
+    rating: 4.3,
+    image: "Images/Wooden Bookshelf.webp"
+  },
+  {
+    id: 28,
+    name: "Smartphone Stand",
+    category: "electronics",
+    price: 299,
+    rating: 4.2,
+    image: "Images/Smartphone Stand.webp"
+  },
+  {
+    id: 29,
+    name: "Smart Phone",
+    category: "electronics",
+    price: 20999,
+    rating: 4.5,
+    image: "Images/SmartPhone.jpeg"
+  },
+  {
+    id: 30,
+    name: "Floor Mat",
+    category: "home",
+    price: 249,
+    rating: 3.8,
+    image: "Images/Floor Mat.jpg"
+  }
+];
+
+const productList = document.getElementById("productList");
+const categoryFilter = document.getElementById("categoryFilter");
+const priceFilter = document.getElementById("priceFilter");
+const sortRating = document.getElementById("sortRating");
+
+function renderProducts(data) {
+  productList.innerHTML = "";
+  data.forEach(product => {
+    const card = document.createElement("div");
+    card.classList.add("product-card");
+    card.innerHTML = `
+      <img src="${product.image}" alt="${product.name}">
+      <div class="info">
+        <h3>${product.name}</h3>
+        <p class="price">₹${product.price}</p>
+        <p class="rating">⭐ ${product.rating}</p>
+        <p>Category: ${product.category}</p>
+      </div>
+    `;
+    productList.appendChild(card);
+  });
+}
+
+function filterAndSort() {
+  let filtered = [...products];
+
+  const selectedCategory = categoryFilter.value;
+  const selectedPrice = priceFilter.value;
+  const selectedSort = sortRating.value;
+
+  if (selectedCategory !== "all") {
+    filtered = filtered.filter(p => p.category === selectedCategory);
+  }
+
+  if (selectedPrice !== "all") {
+    filtered = filtered.filter(p => {
+      if (selectedPrice === "low") return p.price < 500;
+      if (selectedPrice === "medium") return p.price >= 500 && p.price <= 1000;
+      if (selectedPrice === "high") return p.price > 1000;
+    });
+  }
+
+  if (selectedSort === "high") {
+    filtered.sort((a, b) => b.rating - a.rating);
+  } else if (selectedSort === "low") {
+    filtered.sort((a, b) => a.rating - b.rating);
+  }
+
+  renderProducts(filtered);
+}
+
+categoryFilter.addEventListener("change", filterAndSort);
+priceFilter.addEventListener("change", filterAndSort);
+sortRating.addEventListener("change", filterAndSort);
+
+// Initialize
+renderProducts(products);
+
+  </script>
+</body>
+</html>
